@@ -1,3 +1,4 @@
+import { cartAdd } from "../api";
 import configs from "../configs";
 
 export function displayProducts(data = []) {
