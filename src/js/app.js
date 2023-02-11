@@ -1,6 +1,7 @@
-import { getCategories, products } from "../api";
+import { createCart, getCategories, products, signIn, signUp } from "../api";
 import { displayProducts, initializeMEvent } from "./home";
-import { displayCategore } from "./sign-in";
+import { displayCategore, SignIn } from "./sign-in";
+import { SignUp } from "./sign-up";
 import "./style";
 
 document.addEventListener("DOMContentLoaded", async (e) => {
@@ -14,6 +15,62 @@ document.addEventListener("DOMContentLoaded", async (e) => {
     getCategories().then(({ data }) => {
       console.log(data);
       displayCategore(data.payload);
+    });
+  }
+  if (page === "/sign-up.html" || page === "/sign-up") {
+    const signUpForm = document.querySelector(".form__signup");
+    try {
+      signUpForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new SignUp(
+          signUpForm.name.value,
+          signUpForm.lastName.value,
+          signUpForm.email.value,
+          signUpForm.password.value,
+          signUpForm.phone.value
+        );
+        console.log(formData);
+        signUp(formData)
+          .then(({ data }) => {
+            console.log(data);
+            localStorage.token = data.token;
+            localStorage.userId = data.user._id;
+            localStorage.user = JSON.stringify(data.user.role);
+            createCart().then(({data}) => {
+              console.log(data);
+              localStorage.cartId = data.payload._id
+              location.assign("/");
+            })
+          })
+          .catch((err) => {
+           
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  if (page === "/sign-in.html" || page === "/sign-in") {
+    const signInForm = document.querySelector(".signIn_form");
+    signInForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new SignIn(
+        signInForm.email.value,
+        signInForm.password.value
+      );
+
+      console.log(formData);
+      signIn(formData)
+        .then(({ data }) => {
+          console.log(data);
+          localStorage.token = data.token;
+          localStorage.userId = data.payload._id;
+          localStorage.user = JSON.stringify(data.payload.role);
+          location.assign("/");
+        })
+        .catch((err) => {
+         
+        });
     });
   }
 });
