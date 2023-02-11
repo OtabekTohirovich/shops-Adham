@@ -1,6 +1,9 @@
 import {
+  addCategory,
   createCart,
+  createNewProduct,
   getAccount,
+  getAllUserOrder,
   getCategories,
   getUsers,
   products,
@@ -8,13 +11,20 @@ import {
   signUp,
 } from "../api";
 import {
+  CreateCategory,
+  CreateProduct,
   displayAccount,
+  displayAllUserOrder,
+  displayCategoryEdit,
   displayProducts,
   displayUsers,
+  handleInitializeCategory,
   handleIntializeUsers,
   initializeMEvent,
   loadToken,
+  orderForms,
 } from "./home";
+import { initializeOrderEvent } from "./order";
 import { displayCategore, SignIn } from "./sign-in";
 import { SignUp } from "./sign-up";
 import "./style";
@@ -98,6 +108,75 @@ document.addEventListener("DOMContentLoaded", async (e) => {
       handleIntializeUsers();
     });
   }
+  if (page === "/order.html" || page === "/order") {
+    getAllUserOrder().then(({ data }) => {
+      console.log(data);
+      displayAllUserOrder(data.data);
+      initializeOrderEvent();
+    });
+  }
+  if (page === "/cart-order.html" || page === "/cart-order") {
+    orderForms()
+  }
+
+  if (page === "/category.html" || page === "/category") {
+    getCategories().then(({ data }) => {
+      console.log(data);
+      displayCategoryEdit(data.payload);
+      handleInitializeCategory();
+    });
+    let formCate = document.querySelector(".addcate");
+    if (formCate) {
+      formCate.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new CreateCategory(formCate.name.value);
+
+        addCategory(formData).then((data) => {
+          console.log(data.data.payload.name);
+          let dataCate = document.querySelector(".category");
+          dataCate.innerHTML += `<div class="category__link" data-id="${data.data.payload._id}"> 
+          <p class="title__cate">${data.data.payload.name}</p> 
+           <div class="btn__category--wreapper">
+           <button class="edit__category">Edit</button>
+           <button class="delete__category">Delete</button>
+           </div>
+          </div>`;
+          handleInitializeCategory();
+        });
+        formCate.reset();
+      });
+    }
+    let genreWrepper = document.querySelector(".categore__products");  
+    getCategories().then(({ data }) => {
+      console.log(data);
+      let genresTemplate = "";
+      data.payload.forEach((genre) => {
+        genresTemplate += `<li class="category__type">
+          <input name="categoryId" type="radio" id=${genre._id} value=${genre._id}  /> 
+          <label for="${genre._id}">${genre.name}</label></li>`;
+      });
+      genreWrepper.innerHTML = genresTemplate;
+    });
+    const formProduct = document.querySelector(".create__products");
+    formProduct.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new CreateProduct(
+        formProduct.name.value,
+        formProduct.price.value,
+        formProduct.salePrice.value,
+        formProduct.quantity.value,
+        formProduct.description.value,
+        formProduct.categoryId.value
+      );
+      
+      console.log(formData);
+      createNewProduct(formData).then(({data}) => {
+        console.log(data);
+      });
+    });
+  }
+
+
 
   loadToken();
 });
