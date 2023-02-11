@@ -1,5 +1,20 @@
-import { createCart, getCategories, products, signIn, signUp } from "../api";
-import { displayProducts, initializeMEvent } from "./home";
+import {
+  createCart,
+  getAccount,
+  getCategories,
+  getUsers,
+  products,
+  signIn,
+  signUp,
+} from "../api";
+import {
+  displayAccount,
+  displayProducts,
+  displayUsers,
+  handleIntializeUsers,
+  initializeMEvent,
+  loadToken,
+} from "./home";
 import { displayCategore, SignIn } from "./sign-in";
 import { SignUp } from "./sign-up";
 import "./style";
@@ -36,15 +51,13 @@ document.addEventListener("DOMContentLoaded", async (e) => {
             localStorage.token = data.token;
             localStorage.userId = data.user._id;
             localStorage.user = JSON.stringify(data.user.role);
-            createCart().then(({data}) => {
+            createCart().then(({ data }) => {
               console.log(data);
-              localStorage.cartId = data.payload._id
+              localStorage.cartId = data.payload._id;
               location.assign("/");
-            })
+            });
           })
-          .catch((err) => {
-           
-          });
+          .catch((err) => {});
       });
     } catch (err) {
       console.log(err);
@@ -68,9 +81,23 @@ document.addEventListener("DOMContentLoaded", async (e) => {
           localStorage.user = JSON.stringify(data.payload.role);
           location.assign("/");
         })
-        .catch((err) => {
-         
-        });
+        .catch((err) => {});
     });
   }
+  if (page === "/account.html" || page === "/account") {
+    getAccount().then(({ data }) => {
+      console.log(data);
+      displayAccount(data.payload);
+    });
+  }
+
+  if (page === "/all-users.html" || page === "/all-users") {
+    getUsers().then(({ data }) => {
+      console.log(data);
+      displayUsers(data);
+      handleIntializeUsers();
+    });
+  }
+
+  loadToken();
 });

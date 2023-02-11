@@ -91,6 +91,11 @@ export function createNewProduct(quary) {
   });
 }
 
+export function getUsers() {
+  let url = `users/`;
+  return axios.get(url);
+}
+
 export function deleteCategory(id) {
   if (!id) {
     throw "please inser id parametr";
