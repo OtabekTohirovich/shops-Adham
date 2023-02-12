@@ -5,11 +5,13 @@ import {
   getAccount,
   getAllUserOrder,
   getCategories,
+  getUserCart,
   getUsers,
   products,
   signIn,
   signUp,
 } from "../api";
+import { displaycard, initializeCartEvent, initializeDeleteEvent } from "./card";
 import {
   CreateCategory,
   CreateProduct,
@@ -174,6 +176,14 @@ document.addEventListener("DOMContentLoaded", async (e) => {
         console.log(data);
       });
     });
+  }
+  if (page === "/card.html" || page === "/card") {
+    getUserCart().then(({data}) => {
+      console.log(data);
+      displaycard(data.payload.items)
+      initializeDeleteEvent()
+      initializeCartEvent(data.payload.items)
+    })
   }
 
 

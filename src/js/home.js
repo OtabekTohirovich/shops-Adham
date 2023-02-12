@@ -212,6 +212,8 @@ export function orderForms() {
   
         postOrder(localStorage.userId, formData, itemId, totals).then(({data})=>{
           console.log(data);
+          location.reload();
+          location.assign("/index.html")
         })
       });
 

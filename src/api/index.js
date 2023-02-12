@@ -174,10 +174,9 @@ export function postOrder(id, customer, items, total) {
     cartId: `${id}`,
     customer: customer,
     items: items,
-    total: `${total}`
+    total: total
   });
 }
-
 export function getAllUserOrder() {
   let url = `orders`;
   return axios.get(url);

@@ -34,36 +34,31 @@ ApiForImg.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response.status === 404) {
-      Toastify({
-        text: error.response.data.msg,
-        duration: 3000,
-      }).showToast();
-    } else if (error.response.status === 401) {
-      Toastify({
-        text: error.response.data.msg,
-        duration: 3000,
-      }).showToast();
+// axios.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   (error) => {
+//     if (error.response.status == 401) {
+//       Toastify({
+//         text: error.response.data,
+//         duration: 3000,
+//       }).showToast();
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
-      location.assign("/sign-in.html");
-    } else if (error.response.status === 400) {
-      Toastify({
-        text: error.response.data.msg,
-        duration: 3000,
-      }).showToast();
-    } else {
-      Toastify({
-        text: error.response.data.msg,
-        duration: 3000,
-      }).showToast();
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401) {
+      alert("Your session has expired. Please login again.");
+      window.location.replace("/sign-in.html");
     }
     return Promise.reject(error);
   }
 );
-
 export { ApiForImg, axios as default };
+
