@@ -1,4 +1,4 @@
-import { cartAdd, deleteCategory, deleteUser, editCategory, getUserCart, postOrder } from "../api";
+import { cartAdd, deleteCategory, deleteUser, editCategory, getProductId, getUserCart, postOrder } from "../api";
 import configs from "../configs";
 import { OrderData } from "./sign-up";
 
@@ -155,11 +155,11 @@ export function displayAllUserOrder(data = []) {
           <div class="email__contact">${contact.email}</div>
           <div class="phone__contact">${contact.phone}</div>
         </div>
-        <div class="order__costumer" data-id="${customerId._id}">
+        <div class="order__costumer" data-id="${customerId?._id}">
           <h3>Costumer</h3>
-          <div class="name__contact">${customerId.name}</div>
-          <div class="email__contact">${customerId.email}</div>
-          <div class="phone__contact">${customerId.phone}</div>
+          <div class="name__contact">${customerId?.name}</div>
+          <div class="email__contact">${customerId?.email}</div>
+          <div class="phone__contact">${customerId?.phone}</div>
         </div>
         <div class="payment__type">${paymentType}</div>
         <div class="order__shipping">

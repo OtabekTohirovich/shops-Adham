@@ -34,6 +34,11 @@ ApiForImg.interceptors.request.use(
   }
 );
 
+export function searchProducts(query) {
+  let url = `products/search/${query}/page=${1}`; 
+  return axios.get(url);
+}
+
 // axios.interceptors.response.use(
 //   (response) => {
 //     return response;
