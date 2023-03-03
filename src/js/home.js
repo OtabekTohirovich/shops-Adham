@@ -6,6 +6,9 @@ export function displayProducts(data = []) {
   let result = "";
   const productDetails = document.querySelector(".get__products");
   data.forEach((prudoct) => {
+    if(!prudoct){
+      return console.log("salom");
+    }
     let { _id, img, name, description, salePrice, quantity } = prudoct;
     const imgs = img ? img : configs.defaultImg + "400";
     result += `
@@ -37,6 +40,7 @@ export function displayProducts(data = []) {
   });
   productDetails.innerHTML = result;
 }
+
 export function initializeMEvent() {
   const cardNodeList = document.querySelectorAll(".card");
   cardNodeList.forEach((card) => {

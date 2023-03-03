@@ -1,3 +1,4 @@
+import configs from "../configs";
 import {
   addCategory,
   createCart,
@@ -35,7 +36,6 @@ document.addEventListener("DOMContentLoaded", async (e) => {
   const page = location.pathname;
   if (page === "/index.html" || page === "/") {
     products().then(({ data }) => {
-      console.log(data.data);
       displayProducts(data.data);
       initializeMEvent();
     });
