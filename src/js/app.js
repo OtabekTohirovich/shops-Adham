@@ -27,13 +27,22 @@ import {
   loadToken,
   orderForms,
 } from "./home";
+import socket from "./socket";
 import { initializeOrderEvent } from "./order";
 import { displayCategore, SignIn } from "./sign-in";
 import { SignUp } from "./sign-up";
 import "./style";
 
 document.addEventListener("DOMContentLoaded", async (e) => {
+  addEventListener("popstate", (event) => {
+    location.reload();
+  });
   const page = location.pathname;
+
+  socket.on("/orders/new", (data) => {
+    console.log("salom ishladi", data);
+    // button.innerHTML = JSON.stringify(data);
+  });
   if (page === "/index.html" || page === "/") {
     products().then(({ data }) => {
       displayProducts(data.data);
